@@ -9,10 +9,20 @@ import java.util.Objects;
 public class Gasto {
     public static final int ENTRADA = 1;
     public static final int SAIDA = -1;
+
+    public int id;
     public String descricao;
     public float valor;
     public int tipo; // entrada ou saída
     public Date data;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     @Override
     public boolean equals(Object o) {
