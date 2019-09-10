@@ -8,19 +8,17 @@ import android.database.sqlite.SQLiteDatabase;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
-import br.com.tiagoluzs.ulbragastos.DbHelpder;
+import br.com.tiagoluzs.ulbragastos.DbHelper;
 import br.com.tiagoluzs.ulbragastos.bean.Gasto;
 
 public class GastoDao {
 
     private SQLiteDatabase db;
-    private DbHelpder banco;
+    private DbHelper banco;
 
     public GastoDao(Context context) {
-        banco = new DbHelpder(context);
+        banco = new DbHelper(context);
     }
 
     public long save(Gasto gasto) {
@@ -55,16 +53,17 @@ public class GastoDao {
         ArrayList<Gasto> lista = new ArrayList<Gasto>();
 
         db = banco.getReadableDatabase();
+
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR,Integer.valueOf(ano));
         cal.set(Calendar.MONTH,Integer.valueOf(mes));
         cal.set(Calendar.DAY_OF_MONTH,1);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String dt_ini = sdf.format(cal);
+        String dt_ini = sdf.format(cal.getTime());
 
         cal.set(Calendar.DAY_OF_MONTH,cal.getLeastMaximum(Calendar.DAY_OF_MONTH));
-        String dt_fim = sdf.format(cal);
+        String dt_fim = sdf.format(cal.getTime());
 
         String selectArgs[] = new String[]{dt_ini,dt_fim};
         Cursor cursor = db.rawQuery("select id,data,valor,descricao,tipo from gastos where date(data) >= ? and date(data) <= ? ",selectArgs);
