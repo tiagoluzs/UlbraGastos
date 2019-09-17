@@ -1,6 +1,8 @@
 package br.com.tiagoluzs.ulbragastos;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -27,12 +29,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
         btnNovo =  findViewById(R.id.btnNovo);
         listView = findViewById(R.id.listView);
 
-        adapter = new GastosAdapter();
+        listView.addItemDecoration(
+                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        listView.setLayoutManager(llm);
+
+        adapter = new GastosAdapter(null, getBaseContext());
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
         this.ano = String.valueOf(cal.get(Calendar.YEAR));
@@ -53,7 +60,10 @@ public class MainActivity extends AppCompatActivity {
         Log.d("MainActivity()","list()");
         GastoDao dao = new GastoDao(getApplicationContext());
         ArrayList<Gasto> lista = dao.getAll(this.mes, this.ano);
-        adapter.setLista(lista);
+        adapter = new GastosAdapter(lista,getBaseContext());
+        adapter.notifyDataSetChanged();
         listView.setAdapter(adapter);
+        Log.d("MainActivity()","list() =======> " + lista.size());
+
     }
 }

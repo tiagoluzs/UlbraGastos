@@ -7,7 +7,7 @@
     tools:context=".GastoEditActivity">
 
     <EditText
-        android:id="@+id/descricao"
+        android:id="@+id/txtDescricao"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/valor"
+        android:id="@+id/txtValor"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -32,10 +32,10 @@
         android:text="Valor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/descricao" />
+        app:layout_constraintTop_toBottomOf="@+id/txtDescricao" />
 
     <EditText
-        android:id="@+id/data"
+        android:id="@+id/txtData"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -46,7 +46,7 @@
         android:text="Data"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/valor" />
+        app:layout_constraintTop_toBottomOf="@+id/txtValor" />
 
     <RadioGroup
         android:id="@+id/radioGroup"
@@ -55,7 +55,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/data">
+        app:layout_constraintTop_toBottomOf="@+id/txtData">
 
         <RadioButton
             android:id="@+id/radEntrada"
@@ -81,5 +81,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+
+    <Button
+        android:id="@+id/btnCancelar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="Cancelar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSalvar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

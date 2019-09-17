@@ -4,10 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import br.com.tiagoluzs.ulbragastos.DbHelper;
 import br.com.tiagoluzs.ulbragastos.bean.Gasto;
@@ -26,16 +28,20 @@ public class GastoDao {
         long resultado;
         db = banco.getWritableDatabase();
         valores = new ContentValues();
-        valores.put("nome",gasto.getDescricao());
+        valores.put("tipo",gasto.getTipo());
+        valores.put("descricao",gasto.getDescricao());
         valores.put("data",gasto.getData().toGMTString());
         valores.put("valor",gasto.getValor());
 
         if(gasto.getId() == 0) {
+            Log.d("GastoDao()","Insert gasto: " + valores.toString());
             resultado = db.insert("gastos",null, valores);
+            Log.d("GastoDao()","Insert result: " + resultado);
         } else {
-            // tratar update
+            Log.d("GastoDao()","Update gasto: " + valores.toString());
             String args[] = new String[]{String.valueOf(gasto.getId())};
             resultado = db.update("gastos",valores," id = ?" , args);
+            Log.d("GastoDao()","Update result: " + resultado);
         }
         db.close();
         return resultado;
@@ -66,7 +72,13 @@ public class GastoDao {
         String dt_fim = sdf.format(cal.getTime());
 
         String selectArgs[] = new String[]{dt_ini,dt_fim};
-        Cursor cursor = db.rawQuery("select id,data,valor,descricao,tipo from gastos where date(data) >= ? and date(data) <= ? ",selectArgs);
+        String sql = "select id,data,valor,descricao,tipo from gastos where date(data) >= ? and date(data) <= ? ";
+        sql = "select id,data,valor,descricao,tipo from gastos ";
+
+        Log.d("GastoDao()","select: " + sql);
+        Log.d("GastoDao()","args: " + selectArgs.toString());
+
+        Cursor cursor = db.rawQuery(sql,null);
         if(cursor != null) {
             cursor.moveToFirst();
             while(cursor.moveToNext()) {
@@ -75,7 +87,8 @@ public class GastoDao {
                     try {
                         gasto.setData(sdf.parse(cursor.getString(1)));
                     } catch(Exception e) {
-                        e.printStackTrace();
+                        gasto.setData(new Date());
+                        //e.printStackTrace();
                     }
                     gasto.setValor(cursor.getFloat(2));
                     gasto.setDescricao(cursor.getString(3));
@@ -83,6 +96,7 @@ public class GastoDao {
                     lista.add(gasto);
             }
         }
+        db.close();
         return lista;
     }
 

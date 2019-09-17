@@ -1,12 +1,17 @@
 package br.com.tiagoluzs.ulbragastos.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
-public class Gasto {
+public class Gasto implements Parcelable {
     public static final int ENTRADA = 1;
     public static final int SAIDA = -1;
 
@@ -18,6 +23,22 @@ public class Gasto {
 
     public int getId() {
         return id;
+    }
+
+    private Gasto(Parcel parcel) {
+        this.descricao = parcel.readString();
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Date dt = null;
+        try {
+            dt = sdf.parse(parcel.readString());
+        } catch(Exception e) {
+            dt = new Date();
+        }
+        this.data = dt;
+        this.tipo = parcel.readInt();
+        this.valor = parcel.readFloat();
+        this.id = parcel.readInt();
     }
 
     public void setId(int id) {
@@ -70,5 +91,20 @@ public class Gasto {
 
     public void setData(Date data) {
         this.data = data;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(this.descricao);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        parcel.writeString(sdf.format(this.getData()));
+        parcel.writeInt(this.getTipo());
+        parcel.writeFloat(this.getValor());
+        parcel.writeInt(this.getId());
     }
 }
