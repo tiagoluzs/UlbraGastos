@@ -21,11 +21,22 @@ public class Gasto implements Parcelable {
     public int tipo; // entrada ou saída
     public Date data;
 
+
+
     public int getId() {
         return id;
     }
 
-    private Gasto(Parcel parcel) {
+    public Gasto() {
+        this.tipo = Gasto.ENTRADA;
+        this.data = new Date();
+        this.valor = 0;
+        this.descricao = "";
+
+
+    }
+
+    public Gasto(Parcel parcel) {
         this.descricao = parcel.readString();
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -107,4 +118,15 @@ public class Gasto implements Parcelable {
         parcel.writeFloat(this.getValor());
         parcel.writeInt(this.getId());
     }
+
+    public static final Parcelable.Creator<Gasto> CREATOR
+            = new Parcelable.Creator<Gasto>() {
+        public Gasto createFromParcel(Parcel in) {
+            return new Gasto(in);
+        }
+
+        public Gasto[] newArray(int size) {
+            return new Gasto[size];
+        }
+    };
 }

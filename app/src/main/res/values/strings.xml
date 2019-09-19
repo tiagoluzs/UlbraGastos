@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">UlbraGastos</string>
+    <string name="title_activity_filter">FilterActivity</string>
 </resources>

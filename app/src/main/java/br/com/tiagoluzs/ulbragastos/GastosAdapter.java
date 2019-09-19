@@ -43,13 +43,11 @@ public class GastosAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         GastosHolder h = (GastosHolder)holder;
 
-        Gasto it = lista.get(position);
+        final Gasto it = lista.get(position);
         if(it == null) {
             Log.d("GastosAdapter()","it nulo! => " + position);
             return;
         }
-
-
 
         if(h.txtDescricao != null) {
             h.txtDescricao.setText(it.getDescricao());
@@ -57,9 +55,8 @@ public class GastosAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, GastoEditActivity.class);
-
+                    intent.putExtra("gasto",it);
                     context.startActivity(intent);
-
                 }
             });
         }
@@ -90,4 +87,6 @@ public class GastosAdapter extends RecyclerView.Adapter {
         else
             return this.lista.size();
     }
+
+
 }

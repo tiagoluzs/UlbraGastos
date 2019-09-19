@@ -1,7 +1,9 @@
 package br.com.tiagoluzs.ulbragastos;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +21,7 @@ public class GastoEditActivity extends AppCompatActivity {
 
     Button btnCancelar;
     Button btnSalvar;
+    Button btnExcluir;
 
     EditText txtDescricao;
     EditText txtValor;
@@ -28,6 +31,8 @@ public class GastoEditActivity extends AppCompatActivity {
     RadioGroup radioGroup;
 
     Gasto gasto;
+
+    ConstraintLayout layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +48,9 @@ public class GastoEditActivity extends AppCompatActivity {
         radEntrada = findViewById(R.id.radEntrada);
         radSaida = findViewById(R.id.radSaida);
 
+        layout = findViewById(R.id.layout);
+
+
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -56,6 +64,15 @@ public class GastoEditActivity extends AppCompatActivity {
 
         this.btnCancelar = findViewById(R.id.btnCancelar);
         this.btnSalvar = findViewById(R.id.btnSalvar);
+        this.btnExcluir = findViewById(R.id.btnExcluir);
+
+        this.btnExcluir.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                excluir();
+            }
+        });
+
 
         this.btnCancelar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +88,41 @@ public class GastoEditActivity extends AppCompatActivity {
             }
         });
 
-        this.gasto = new Gasto();
+        if(getIntent().getParcelableExtra("gasto") != null) {
+            this.gasto = getIntent().getParcelableExtra("gasto");
+        } else {
+            this.gasto = new Gasto();
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+        this.txtData.setText(sdf.format(this.gasto.getData()));
+        this.txtDescricao.setText(this.gasto.getDescricao());
+        this.txtValor.setText(String.valueOf(this.gasto.getValor()));
+        this.radEntrada.setSelected(this.gasto.getTipo() == Gasto.ENTRADA);
+        this.radSaida.setSelected(this.gasto.getTipo() == Gasto.SAIDA);
+
+        if(this.gasto.id == 0) {
+            this.btnExcluir.setVisibility(View.INVISIBLE);
+        } else {
+            this.btnExcluir.setVisibility(View.VISIBLE);
+        }
+
+        layout.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                MainActivity.hideKeyboardFrom(getBaseContext(),layout);
+            }
+        });
+
+    }
+
+
+    void excluir() {
+        GastoDao dao = new GastoDao(getBaseContext());
+        dao.delete(this.gasto);
+        Toast.makeText(getBaseContext(),"Gasto excluído!",Toast.LENGTH_LONG).show();
+        finish();
     }
 
     void salvar() {

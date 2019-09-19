@@ -30,7 +30,12 @@ public class GastoDao {
         valores = new ContentValues();
         valores.put("tipo",gasto.getTipo());
         valores.put("descricao",gasto.getDescricao());
-        valores.put("data",gasto.getData().toGMTString());
+        SimpleDateFormat sdf = new SimpleDateFormat(("yyyy-MM-dd"));
+        try {
+            valores.put("data", sdf.format(gasto.getData()));
+        } catch(Exception e) {
+            valores.put("data", sdf.format(new Date()));
+        }
         valores.put("valor",gasto.getValor());
 
         if(gasto.getId() == 0) {
