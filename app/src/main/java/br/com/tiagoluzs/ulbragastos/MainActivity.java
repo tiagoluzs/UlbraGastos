@@ -111,13 +111,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        /*Intent intent = new Intent(getBaseContext(), FilterActivity.class);
-        intent.putExtra("mes",mes);
-        intent.putExtra("ano",ano);
-        startActivity(intent);
-
-         */
-
         createDialogWithoutDateField(Integer.valueOf(ano), Integer.valueOf(mes), Integer.valueOf(dia)).show();
         return true;
 
