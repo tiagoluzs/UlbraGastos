@@ -13,6 +13,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,15 +41,17 @@ public class MainActivity extends AppCompatActivity {
 
     RecyclerView listView;
     public GastosAdapter adapter;
-    public String dia;
-    public String mes;
-    public String ano;
+    public static String dia;
+    public static String mes;
+    public static String ano;
     public float saldo;
     public TextView txtSaldo;
     ConstraintLayout layout;
     FloatingActionButton btnNovo;
     Toolbar toolbar;
     ActionBar actionBar;
+
+    DatePickerDialog datePickerDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         actionBar = getActionBar();
-
 
         btnNovo = findViewById(R.id.btnNovo);
 
@@ -110,20 +112,19 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
         createDialogWithoutDateField(Integer.valueOf(ano), Integer.valueOf(mes), Integer.valueOf(dia)).show();
         return true;
 
     }
 
-    private DatePickerDialog createDialogWithoutDateField(int ano, int mes, int dia) {
-        DatePickerDialog dpd = new DatePickerDialog(this, null, ano, mes, dia);
+    private DatePickerDialog createDialogWithoutDateField(int sano, int smes, int sdia) {
+        datePickerDialog = new DatePickerDialog(this, null, sano, smes, sdia);
         try {
-            java.lang.reflect.Field[] datePickerDialogFields = dpd.getClass().getDeclaredFields();
+            java.lang.reflect.Field[] datePickerDialogFields = datePickerDialog.getClass().getDeclaredFields();
             for (java.lang.reflect.Field datePickerDialogField : datePickerDialogFields) {
                 if (datePickerDialogField.getName().equals("mDatePicker")) {
                     datePickerDialogField.setAccessible(true);
-                    DatePicker datePicker = (DatePicker) datePickerDialogField.get(dpd);
+                    DatePicker datePicker = (DatePicker) datePickerDialogField.get(datePickerDialog);
                     java.lang.reflect.Field[] datePickerFields = datePickerDialogField.getType().getDeclaredFields();
                     for (java.lang.reflect.Field datePickerField : datePickerFields) {
                         Log.i("test", datePickerField.getName());
@@ -137,8 +138,23 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         catch (Exception ex) {
+            ex.printStackTrace();
         }
-        return dpd;
+
+        datePickerDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                MainActivity.ano = String.valueOf(datePickerDialog.getDatePicker().getYear());
+                MainActivity.mes = String.valueOf(datePickerDialog.getDatePicker().getMonth());
+                if(MainActivity.mes.length() != 2) {
+                    MainActivity.mes = "0" + MainActivity.mes;
+                }
+                MainActivity.dia = String.valueOf(datePickerDialog.getDatePicker().getDayOfMonth());
+                list();
+            }
+        });
+
+        return datePickerDialog;
     }
 
     @Override
@@ -159,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void list() {
-        Log.d("MainActivity()","list()");
+        Log.d("MainActivity()","list() => " + this.mes + "/" + this.ano );
         GastoDao dao = new GastoDao(getApplicationContext());
 
         if(this.mes.length() != 2) {
@@ -178,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
                 saldo -= g.valor;
             }
         }
-        DecimalFormat decimalFormat = new DecimalFormat("R$ #.00");
+        DecimalFormat decimalFormat = new DecimalFormat("R$ #0.00");
 
         this.txtSaldo.setText("Saldo : " + decimalFormat.format(saldo));
 

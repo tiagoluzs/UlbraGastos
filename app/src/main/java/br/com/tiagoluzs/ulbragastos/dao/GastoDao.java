@@ -78,7 +78,7 @@ public class GastoDao {
 
         String selectArgs[] = new String[]{dt_ini,dt_fim};
         String sql = "select id,data,valor,descricao,tipo from gastos where date(data) >= ? and date(data) <= ? ";
-        sql = "select id,data,valor,descricao,tipo from gastos ";
+        //sql = "select id,data,valor,descricao,tipo from gastos ";
 
         Log.d("GastoDao()","select: " + sql);
         Log.d("GastoDao()","args: " + selectArgs.toString());
