@@ -42,25 +42,10 @@ public class GastoEditActivity extends AppCompatActivity {
         txtValor = findViewById(R.id.txtValor);
         txtDescricao = findViewById(R.id.txtDescricao);
         txtData = findViewById(R.id.txtData);
-
         radioGroup = findViewById(R.id.radioGroup);
-
         radEntrada = findViewById(R.id.radEntrada);
         radSaida = findViewById(R.id.radSaida);
-
         layout = findViewById(R.id.layout);
-
-
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                if(R.id.radEntrada == i) {
-                    gasto.setTipo(Gasto.ENTRADA);
-                } else if(R.id.radSaida == i) {
-                    gasto.setTipo(Gasto.SAIDA);
-                }
-            }
-        });
 
         this.btnCancelar = findViewById(R.id.btnCancelar);
         this.btnSalvar = findViewById(R.id.btnSalvar);
@@ -72,15 +57,12 @@ public class GastoEditActivity extends AppCompatActivity {
                 excluir();
             }
         });
-
-
         this.btnCancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
-
         this.btnSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,8 +81,9 @@ public class GastoEditActivity extends AppCompatActivity {
         this.txtData.setText(sdf.format(this.gasto.getData()));
         this.txtDescricao.setText(this.gasto.getDescricao());
         this.txtValor.setText(String.valueOf(this.gasto.getValor()));
-        this.radEntrada.setSelected(this.gasto.getTipo() == Gasto.ENTRADA);
-        this.radSaida.setSelected(this.gasto.getTipo() == Gasto.SAIDA);
+
+        this.radEntrada.setChecked(this.gasto.getTipo() == Gasto.ENTRADA);
+        this.radSaida.setChecked(this.gasto.getTipo() == Gasto.SAIDA);
 
         if(this.gasto.id == 0) {
             this.btnExcluir.setVisibility(View.INVISIBLE);
@@ -114,9 +97,7 @@ public class GastoEditActivity extends AppCompatActivity {
                 MainActivity.hideKeyboardFrom(getBaseContext(),layout);
             }
         });
-
     }
-
 
     void excluir() {
         GastoDao dao = new GastoDao(getBaseContext());
@@ -128,7 +109,11 @@ public class GastoEditActivity extends AppCompatActivity {
     void salvar() {
         GastoDao dao = new GastoDao(getBaseContext());
 
-
+        if(this.radSaida.isChecked()) {
+            gasto.setTipo(Gasto.SAIDA);
+        } else if(this.radEntrada.isChecked()) {
+            gasto.setTipo(Gasto.ENTRADA);
+        }
         if(gasto.getTipo() != Gasto.ENTRADA && gasto.getTipo() != Gasto.SAIDA) {
             Toast.makeText(getBaseContext(),"Selecione se é entrada ou saída.",Toast.LENGTH_LONG).show();
             return;
@@ -139,7 +124,6 @@ public class GastoEditActivity extends AppCompatActivity {
             Toast.makeText(getBaseContext(),"Informe uma descrição para o gasto ou entrada.",Toast.LENGTH_LONG).show();
             return;
         }
-
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String dtTxt = txtData.getText().toString();
@@ -170,7 +154,5 @@ public class GastoEditActivity extends AppCompatActivity {
         } else {
             Toast.makeText(getBaseContext(),"Não foi possível salvar gasto.",Toast.LENGTH_LONG).show();
         }
-
-
     }
 }

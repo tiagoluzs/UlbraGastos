@@ -68,7 +68,6 @@ public class GastosAdapter extends RecyclerView.Adapter {
 
         if(h.txtValor != null) {
             float val = it.getValor();
-            Log.d("GastosAdapter()","Valor: " + val);
             DecimalFormat decimalFormat = new DecimalFormat("R$ #.00");
             h.txtValor.setText(decimalFormat.format(val));
             if(it.getTipo() == Gasto.ENTRADA) {
