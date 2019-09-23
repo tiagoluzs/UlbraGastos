@@ -5,6 +5,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,6 +13,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 
 import br.com.tiagoluzs.ulbragastos.bean.Gasto;
@@ -34,6 +36,14 @@ public class GastoEditActivity extends AppCompatActivity {
 
     ConstraintLayout layout;
 
+    private float getFloatValue(EditText field) throws Exception {
+
+        NumberFormat nf = NumberFormat.getCurrencyInstance();
+        String val = field.getText().toString();
+        return nf.parse(val).floatValue();
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +56,8 @@ public class GastoEditActivity extends AppCompatActivity {
         radEntrada = findViewById(R.id.radEntrada);
         radSaida = findViewById(R.id.radSaida);
         layout = findViewById(R.id.layout);
+
+        txtValor.addTextChangedListener(new MoneyMask(txtValor));
 
         this.btnCancelar = findViewById(R.id.btnCancelar);
         this.btnSalvar = findViewById(R.id.btnSalvar);
@@ -80,7 +92,8 @@ public class GastoEditActivity extends AppCompatActivity {
 
         this.txtData.setText(sdf.format(this.gasto.getData()));
         this.txtDescricao.setText(this.gasto.getDescricao());
-        this.txtValor.setText(String.valueOf(this.gasto.getValor()));
+
+        this.txtValor.setText(NumberFormat.getCurrencyInstance().format(this.gasto.getValor()));
 
         this.radEntrada.setChecked(this.gasto.getTipo() == Gasto.ENTRADA);
         this.radSaida.setChecked(this.gasto.getTipo() == Gasto.SAIDA);
@@ -102,7 +115,7 @@ public class GastoEditActivity extends AppCompatActivity {
     void excluir() {
         GastoDao dao = new GastoDao(getBaseContext());
         dao.delete(this.gasto);
-        Toast.makeText(getBaseContext(),"Gasto excluído!",Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(),getResources().getString(R.string.gasto_excluido),Toast.LENGTH_LONG).show();
         finish();
     }
 
@@ -115,13 +128,13 @@ public class GastoEditActivity extends AppCompatActivity {
             gasto.setTipo(Gasto.ENTRADA);
         }
         if(gasto.getTipo() != Gasto.ENTRADA && gasto.getTipo() != Gasto.SAIDA) {
-            Toast.makeText(getBaseContext(),"Selecione se é entrada ou saída.",Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(),getResources().getString(R.string.selecione_tipo_gasto),Toast.LENGTH_LONG).show();
             return;
         }
 
         gasto.setDescricao(txtDescricao.getText().toString());
         if(gasto.getDescricao().length() <= 1) {
-            Toast.makeText(getBaseContext(),"Informe uma descrição para o gasto ou entrada.",Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(),getResources().getString(R.string.informe_descricao_gasto),Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -129,30 +142,31 @@ public class GastoEditActivity extends AppCompatActivity {
         String dtTxt = txtData.getText().toString();
         try {
             gasto.setData(sdf.parse(dtTxt));
+            Log.d("GastoEditActivity","Save() => parse " +dtTxt + " => " + gasto.getData().toString());
         } catch(Exception e) {
-            Toast.makeText(getBaseContext(),"Formato da data inválido. Deve ser dd/mm/aaaa.",Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(),getResources().getString(R.string.formato_data_invalido),Toast.LENGTH_LONG).show();
             return;
         }
 
-        String valor = txtValor.getText().toString();
         try {
-            float valorFloat = Float.parseFloat(valor);
+            float valorFloat = getFloatValue(txtValor);
+            Log.d("GastosEdit ","getFloatValue() => " + valorFloat);
             if(valorFloat <= 0) {
-                Toast.makeText(getBaseContext(),"Informe o valor no formato ex. 343.43",Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(),getResources().getString(R.string.informe_valor_gasto),Toast.LENGTH_LONG).show();
                 return;
             }
             gasto.setValor(valorFloat);
         } catch(Exception e) {
-            Toast.makeText(getBaseContext(),"Informe o valor no formato ex. 343.43",Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(),getResources().getString(R.string.informe_valor_gasto),Toast.LENGTH_LONG).show();
             return;
         }
 
         long resultado = dao.save(gasto);
         if(resultado > 0) {
-            Toast.makeText(getBaseContext(),"Gasto salvo com sucesso!",Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(),getResources().getString(R.string.gasto_salvo),Toast.LENGTH_LONG).show();
             finish();
         } else {
-            Toast.makeText(getBaseContext(),"Não foi possível salvar gasto.",Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(),getResources().getString(R.string.gasto_salvo_erro),Toast.LENGTH_LONG).show();
         }
     }
 }

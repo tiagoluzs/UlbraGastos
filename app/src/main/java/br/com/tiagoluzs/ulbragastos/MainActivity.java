@@ -76,11 +76,12 @@ public class MainActivity extends AppCompatActivity {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         listView.setLayoutManager(llm);
 
-        adapter = new GastosAdapter(null, getBaseContext());
+        adapter = new GastosAdapter(null, getBaseContext(),listView);
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
+
         this.ano = String.valueOf(cal.get(Calendar.YEAR));
-        this.mes = String.valueOf(cal.get(Calendar.MONTH));
+        this.mes = String.valueOf(cal.get(Calendar.MONTH)+1);
         this.dia = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
 
         layout.setOnClickListener(new View.OnClickListener(){
@@ -112,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        createDialogWithoutDateField(Integer.valueOf(ano), Integer.valueOf(mes), Integer.valueOf(dia)).show();
+        createDialogWithoutDateField(Integer.valueOf(ano), Integer.valueOf(mes)-1, Integer.valueOf(dia)).show();
         return true;
 
     }
@@ -145,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
                 MainActivity.ano = String.valueOf(datePickerDialog.getDatePicker().getYear());
-                MainActivity.mes = String.valueOf(datePickerDialog.getDatePicker().getMonth());
+                MainActivity.mes = String.valueOf(datePickerDialog.getDatePicker().getMonth()+1);
                 if(MainActivity.mes.length() != 2) {
                     MainActivity.mes = "0" + MainActivity.mes;
                 }
@@ -196,9 +197,9 @@ public class MainActivity extends AppCompatActivity {
         }
         DecimalFormat decimalFormat = new DecimalFormat("R$ #0.00");
 
-        this.txtSaldo.setText("Saldo : " + decimalFormat.format(saldo));
+        this.txtSaldo.setText(getResources().getString(R.string.saldo)+" : " + decimalFormat.format(saldo));
 
-        adapter = new GastosAdapter(lista,getBaseContext());
+        adapter = new GastosAdapter(lista,getBaseContext(),listView);
         adapter.notifyDataSetChanged();
         listView.setAdapter(adapter);
         Log.d("MainActivity()","list() =======> " + lista.size());

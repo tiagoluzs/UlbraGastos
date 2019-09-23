@@ -65,23 +65,16 @@ public class GastoDao {
 
         db = banco.getReadableDatabase();
 
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR,Integer.valueOf(ano));
-        cal.set(Calendar.MONTH,Integer.valueOf(mes));
-        cal.set(Calendar.DAY_OF_MONTH,1);
+        if(mes.length() == 1) {
+            mes = "0" + mes;
+        }
+        String Ym = ano + mes;
+
+        String sql = "select id,data,valor,descricao,tipo from gastos where strftime('%Y%m', data) = '"+Ym+"' order by data asc";
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String dt_ini = sdf.format(cal.getTime());
-
-        cal.set(Calendar.DAY_OF_MONTH,cal.getLeastMaximum(Calendar.DAY_OF_MONTH));
-        String dt_fim = sdf.format(cal.getTime());
-
-        String selectArgs[] = new String[]{dt_ini,dt_fim};
-        String sql = "select id,data,valor,descricao,tipo from gastos where date(data) >= ? and date(data) <= ? ";
-        //sql = "select id,data,valor,descricao,tipo from gastos ";
 
         Log.d("GastoDao()","select: " + sql);
-        Log.d("GastoDao()","args: " + selectArgs.toString());
 
         Cursor cursor = db.rawQuery(sql,null);
         if(cursor != null) {
@@ -93,7 +86,6 @@ public class GastoDao {
                         gasto.setData(sdf.parse(cursor.getString(1)));
                     } catch(Exception e) {
                         gasto.setData(new Date());
-                        //e.printStackTrace();
                     }
                     gasto.setValor(cursor.getFloat(2));
                     gasto.setDescricao(cursor.getString(3));

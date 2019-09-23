@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -22,10 +23,12 @@ public class GastosAdapter extends RecyclerView.Adapter {
 
     public ArrayList<Gasto> lista;
     private Context context;
+    private RecyclerView recyclerView;
 
-    public GastosAdapter(ArrayList<Gasto> lista,Context context) {
+    public GastosAdapter(ArrayList<Gasto> lista,Context context, RecyclerView recyclerView) {
         this.lista = lista;
         this.context = context;
+        this.recyclerView = recyclerView;
     }
 
     void setLista(ArrayList<Gasto> lista){
@@ -35,8 +38,21 @@ public class GastosAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new GastosHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.lista_item, parent, false));
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.lista_item, parent, false);
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int itemPosition = recyclerView.getChildLayoutPosition(view);
+                Intent intent = new Intent(context, GastoEditActivity.class);
+                intent.putExtra("gasto",lista.get(itemPosition));
+                context.startActivity(intent);
+            }
+        });
+
+        return new GastosHolder(view);
+
     }
 
     @Override
@@ -51,14 +67,6 @@ public class GastosAdapter extends RecyclerView.Adapter {
 
         if(h.txtDescricao != null) {
             h.txtDescricao.setText(it.getDescricao());
-            h.txtDescricao.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(context, GastoEditActivity.class);
-                    intent.putExtra("gasto",it);
-                    context.startActivity(intent);
-                }
-            });
         }
 
         if(h.txtData != null) {
@@ -68,8 +76,7 @@ public class GastosAdapter extends RecyclerView.Adapter {
 
         if(h.txtValor != null) {
             float val = it.getValor();
-            DecimalFormat decimalFormat = new DecimalFormat("R$ #.00");
-            h.txtValor.setText(decimalFormat.format(val));
+            h.txtValor.setText(NumberFormat.getCurrencyInstance().format(val));
             if(it.getTipo() == Gasto.ENTRADA) {
                 h.txtValor.setTextColor(Color.BLACK);
             } else {

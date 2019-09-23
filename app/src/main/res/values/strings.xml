@@ -1,4 +1,30 @@
 <resources>
     <string name="app_name">UlbraGastos</string>
-    <string name="title_activity_filter">FilterActivity</string>
+    <string name="title_activity_filter">UlbraGastos</string>
+    <string name="formato_data_invalido">Formato da data inválido. Deve ser dd/mm/aaaa.</string>
+    <string name="informe_descricao_gasto">Informe uma descrição para o gasto ou entrada.</string>
+    <string name="informe_valor_gasto">Informe o valor no formato ex. 343.43.</string>
+    <string name="gasto_salvo">Gasto salvo com sucesso!</string>
+    <string name="gasto_salvo_erro">Não foi possível salvar gasto.</string>
+    <string name="selecione_tipo_gasto">Selecione se é entrada ou saída.</string>
+    <string name="gasto_excluido">Gasto excluído!</string>
+    <string name="saldo">Saldo</string>
+    <string name="descricao">Descrição</string>
+    <string name="valor">Valor</string>
+    <string name="data">Data</string>
+    <string name="entrada">Entrada</string>
+    <string name="saida">Saída</string>
+    <string name="salvar">Salvar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="excluir">Excluir</string>
+    <string name="descricao_content_description">Informe a descrição do gasto.</string>
+    <string name="valor_content_description">Informe o valor do gasto. Não utilize o sinal de menos se for negativo.</string>
+    <string name="data_content_description">Informe a data no formato dia-dia, mês-mês e ano com quatro dígitos.</string>
+    <string name="entrada_content_description">Selecione este campo para marcar o gasto como uma entrada de dinheiro, como por exemplo seu salário ou um empréstimo.</string>
+    <string name="saida_content_description">Selecione este campo para marcar o gasto como uma saída de dinheiro, como uma compra ou um pagamento de uma conta.</string>
+
+    <string name="salvar_content_description">Clique neste botão para salvar seu gasto.</string>
+    <string name="excluir_content_description">Clique neste botão para excluir seu gasto.</string>
+    <string name="cancelar_content_description">Clique neste botão para cancelar e voltar à listagem de gastos.</string>
+
 </resources>

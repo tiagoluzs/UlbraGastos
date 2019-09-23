@@ -8,7 +8,6 @@
     tools:context=".GastoEditActivity">
 
 
-
     <EditText
         android:id="@+id/txtDescricao"
         android:layout_width="0dp"
@@ -16,9 +15,11 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:contentDescription="@string/descricao_content_description"
         android:ems="10"
+        android:autofillHints="false"
         android:inputType="textPersonName"
-        android:text="Descrição"
+        android:text="@string/descricao"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -30,9 +31,11 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:contentDescription="@string/valor_content_description"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Valor"
+        android:autofillHints="false"
+        android:inputType="number"
+        android:text="@string/valor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtDescricao" />
@@ -44,9 +47,11 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:contentDescription="@string/data_content_description"
         android:ems="10"
+        android:autofillHints="false"
         android:inputType="date"
-        android:text="Data"
+        android:text="@string/data"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtValor" />
@@ -64,13 +69,15 @@
             android:id="@+id/radEntrada"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Entrada" />
+            android:contentDescription="@string/entrada_content_description"
+            android:text="@string/entrada" />
 
         <RadioButton
             android:id="@+id/radSaida"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Saída" />
+            android:contentDescription="@string/saida_content_description"
+            android:text="@string/saida" />
     </RadioGroup>
 
     <Button
@@ -80,7 +87,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:text="Salvar"
+        android:contentDescription="@string/salvar_content_description"
+        android:text="@string/salvar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
@@ -92,7 +100,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:text="Cancelar"
+        android:contentDescription="@string/cancelar_content_description"
+        android:text="@string/cancelar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnSalvar" />
@@ -104,7 +113,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:text="Excluir"
+        android:contentDescription="@string/excluir_content_description"
+        android:text="@string/excluir"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnCancelar" />
