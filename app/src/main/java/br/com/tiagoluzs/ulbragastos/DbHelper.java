@@ -20,7 +20,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        Log.d("DbHelper()","onCreate()");
+        Log.d("DbHelper()","DbHelper->onCreate()");
 
         String sql = "create table gastos (" +
                 " id integer primary key autoincrement," +

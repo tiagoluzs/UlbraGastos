@@ -78,22 +78,26 @@ public class GastoDao {
 
         Cursor cursor = db.rawQuery(sql,null);
         if(cursor != null) {
-            cursor.moveToFirst();
+            int qtd = 0;
             while(cursor.moveToNext()) {
-                    Gasto gasto = new Gasto();
-                    gasto.setId(cursor.getInt(0));
-                    try {
-                        gasto.setData(sdf.parse(cursor.getString(1)));
-                    } catch(Exception e) {
-                        gasto.setData(new Date());
-                    }
-                    gasto.setValor(cursor.getFloat(2));
-                    gasto.setDescricao(cursor.getString(3));
-                    gasto.setTipo(cursor.getInt(4));
-                    lista.add(gasto);
+                qtd++;
+                Gasto gasto = new Gasto();
+                gasto.setId(cursor.getInt(0));
+                try {
+                    gasto.setData(sdf.parse(cursor.getString(1)));
+                } catch(Exception e) {
+                    e.printStackTrace();
+                    gasto.setData(new Date());
+                }
+                gasto.setValor(cursor.getFloat(2));
+                gasto.setDescricao(cursor.getString(3));
+                gasto.setTipo(cursor.getInt(4));
+                lista.add(gasto);
             }
+            Log.d("GastoDao","getAll() => QTD: "+qtd);
         }
         db.close();
+
         return lista;
     }
 
